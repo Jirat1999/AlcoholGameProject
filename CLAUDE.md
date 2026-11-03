@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-เกมวงเหล้าแบบการ์ดคำสั่ง (UI ภาษาไทย) สร้างด้วย .NET 8 MAUI Blazor Hybrid: เขียนโค้ดครั้งเดียวใน Shared แล้วรันได้ทั้งแอป (Android/iOS/macOS/Windows) และเว็บ (Blazor WebAssembly)
+เกมวงเหล้าแบบการ์ดคำสั่ง (UI ภาษาไทย) สร้างด้วย .NET 10 MAUI Blazor Hybrid: เขียนโค้ดครั้งเดียวใน Shared แล้วรันได้ทั้งแอป (Android/iOS/macOS/Windows) และเว็บ (Blazor WebAssembly)
 
 ## โครงสร้าง
 
@@ -26,8 +26,8 @@ dotnet run --project src/AlcoholGame.Web              # รันเว็บใ
 dotnet publish src/AlcoholGame.Web -c Release -o out  # publish เว็บ
 
 # แอป MAUI (ต้อง dotnet workload install maui ก่อน)
-dotnet build src/AlcoholGame.Maui -f net8.0-windows10.0.19041.0              # Windows
-dotnet build src/AlcoholGame.Maui -t:Run -f net8.0-android                   # Android
+dotnet build src/AlcoholGame.Maui -f net10.0-windows10.0.19041.0              # Windows
+dotnet build src/AlcoholGame.Maui -t:Run -f net10.0-android                   # Android
 # iOS / Mac Catalyst ต้อง build บน Mac เท่านั้น
 ```
 
