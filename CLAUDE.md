@@ -8,8 +8,10 @@
 AlcoholGameProject.sln
 src/AlcoholGame.Shared/   Razor Class Library: หน้าจอ, component, โค้ดเกมทั้งหมด (แก้ที่นี่เป็นหลัก)
   Models/                 Card, Category, GameState
-  Services/               DeckService (การ์ดในตัว + สับไพ่), AddAlcoholGame() สำหรับ DI
-  Pages/                  Home (ยืนยัน 20+), Setup (/setup), Play (/play)
+  Services/               DeckService (การ์ดในตัว + สับไพ่), Avatar (สี/ตัวอักษรอวตาร), AddAlcoholGame() สำหรับ DI
+  Components/             Icon.razor + IconData.cs (ไอคอน SVG จาก Lucide ฝังในโค้ด ดู THIRD-PARTY-NOTICES.md)
+  Pages/                  Home (ยืนยัน 20+), Setup (/setup), Play (/play: จั่ว-เปิดการ์ด-ส่งต่อ)
+  wwwroot/game.css        ธีมกลาง (สีพื้นหลัง, ตัวแปรสีหมวด .cat-*, ปุ่ม .btn-main) โหลดจาก index.html ของทั้ง Web และ Maui
   Layout/                 MainLayout (มือถือก่อน, ไม่มี sidebar)
 src/AlcoholGame.Maui/     แอป MAUI: BlazorWebView โหลด App จาก Shared (ไม่ค่อยต้องแก้)
 src/AlcoholGame.Web/      Blazor WASM: mount App จาก Shared (ไม่ค่อยต้องแก้)
@@ -46,13 +48,15 @@ MAUI build บน Linux ไม่ได้ ถ้าทำงานบน Linux 
 ## แนวทางเขียนโค้ด
 
 - C# nullable enabled, file-scoped namespace, `record` สำหรับข้อมูลไม่เปลี่ยนค่า
-- สไตล์ของแต่ละหน้าอยู่ใน `.razor.css` ข้างไฟล์ (CSS isolation) เน้นมือถือก่อน ปุ่มกดใหญ่ ความกว้างสูงสุด 480px
+- สไตล์ของแต่ละหน้าอยู่ใน `.razor.css` ข้างไฟล์ (CSS isolation) เน้นมือถือก่อน ปุ่มกดใหญ่ ความกว้างสูงสุด 480px; สี/ตัวแปรที่ใช้ร่วมกันอยู่ใน `wwwroot/game.css` (หมวดใหม่ต้องเพิ่ม `.cat-<ชื่อ>` ที่นี่ด้วย)
+- **ห้ามใช้อีโมจิใน UI** (หน้าตาต่างกันไปตามระบบ) ให้ใช้ `<Icon Name="..." />` แทน; หมวดการ์ดแมปกับไอคอนที่ `CategoryInfo.Icon`; ถ้าต้องการไอคอนใหม่ ให้เพิ่มรายการใน `Components/IconData.cs` (ใช้ path จาก Lucide แล้วอัปเดต THIRD-PARTY-NOTICES.md ถ้าจำเป็น)
+- UI ต้องให้ความรู้สึกเป็นเกม: หน้า Play ใช้การ์ดคว่ำที่ต้องแตะเพื่อเปิด (`.card-back` → `.card`) มีอนิเมชันพลิก และ `@key` ผูกกับรอบ/ใบ เพื่อให้อนิเมชันเล่นใหม่ทุกใบ; เคารพ `prefers-reduced-motion`
 - ข้อความที่ผู้ใช้เห็นเป็นภาษาไทย ชื่อ class/method เป็นอังกฤษ
 - เพิ่ม/แก้การ์ดที่ `Services/DeckService.cs` (`BuiltIn`) แล้วเพิ่ม test ถ้าเปลี่ยนกติกา; test เดิมตรวจว่าทุกหมวดมีการ์ดและ placeholder ถูกต้อง
 - เพิ่มหน้าใหม่ใน `Shared/Pages/` ด้วย `@page` ไม่ต้องแก้ host
 
 ## ข้อควรระวัง
 
-- ถ้าเขียนสคริปต์ทดสอบเบราว์เซอร์ (Playwright) อย่าเลือกปุ่มด้วย `text=ถัดไป` เพราะข้อความการ์ดบางใบมีคำว่า "ถัดไป" ให้ใช้ `button.btn-main` แทน
+- ถ้าเขียนสคริปต์ทดสอบเบราว์เซอร์ (Playwright) อย่าเลือกปุ่มด้วยข้อความ (ข้อความการ์ดบางใบมีคำว่า "ถัดไป") ให้ใช้ selector: `.card-back` (เปิดการ์ด), `button.btn-main` (ผู้เล่นคนต่อไป / เริ่มเกม), `button.btn-link` (จบเกม), `.btn-add` (เพิ่มผู้เล่น); ต้องคลิก `.card-back` ก่อนจึงจะอ่าน `.text` ได้
 - ปุ่มใน Blazor ผูก `@onclick` กับเมธอดของคอมโพเนนต์ (เช่น `NextCard`) ตามที่ Play.razor ทำ
 - Branch หลักที่ใช้พัฒนาอยู่คือ `web-blazor-hybrid` (branch `maui-initial-project` เป็นแบบ MAUI เปล่า ไม่ใช้แล้ว)

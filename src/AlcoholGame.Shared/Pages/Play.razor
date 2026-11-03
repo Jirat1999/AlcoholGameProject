@@ -6,20 +6,68 @@
 
 @if (Game.Started && Game.CurrentCard is { } card)
 {
-    <div class="turn">ตาของ <strong>@Game.CurrentPlayer</strong></div>
+    var pct = Game.DeckSize == 0 ? 0 : Game.CardsShownThisRound * 100 / Game.DeckSize;
+    var cur = Game.Players.ToList().IndexOf(Game.CurrentPlayer);
 
-    <article class="card cat-@card.Category.ToString().ToLowerInvariant()">
-        <span class="badge">@CategoryInfo.Label(card.Category)</span>
-        <p class="text">@Game.CurrentText</p>
-    </article>
+    <div class="hud">
+        <span class="round">รอบ @Game.Round</span>
+        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="@pct">
+            <div class="bar" style="width:@(pct)%"></div>
+        </div>
+        <span class="meta">รอบที่ @Game.Round · ใบที่ @Game.CardsShownThisRound/@Game.DeckSize</span>
+    </div>
 
-    <div class="meta">รอบที่ @Game.Round · ใบที่ @Game.CardsShownThisRound/@Game.DeckSize</div>
+    <div class="roster" aria-label="ผู้เล่น">
+        @for (var i = 0; i < Game.Players.Count; i++)
+        {
+            var p = Game.Players[i];
+            <span class="chip @(i == cur ? "active" : "")">
+                <span class="avatar" style="background:@Avatar.Color(i)">@Avatar.Initial(p)</span>
+                <span class="n">@p</span>
+            </span>
+        }
+    </div>
 
-    <button class="btn-main" @onclick="NextCard">ถัดไป</button>
+    <div class="turn">
+        <span class="avatar big" style="background:@Avatar.Color(cur)">@Avatar.Initial(Game.CurrentPlayer)</span>
+        <span>ตาของ <strong>@Game.CurrentPlayer</strong></span>
+    </div>
+
+    <div class="stage" @key="@($"{Game.Round}-{Game.CardsShownThisRound}")">
+        @if (!_revealed)
+        {
+            <button class="card-back" @onclick="Reveal" aria-label="แตะเพื่อเปิดการ์ด">
+                <span class="pattern" aria-hidden="true"><Icon Name="beer" Size="5rem" Stroke="1.5" /></span>
+                <span class="tap">แตะเพื่อเปิดการ์ด</span>
+            </button>
+        }
+        else
+        {
+            <article class="card cat-@card.Category.ToString().ToLowerInvariant()">
+                <div class="corner tl"><Icon Name="@CategoryInfo.Icon(card.Category)" Size="1.6rem" /></div>
+                <div class="corner br"><Icon Name="@CategoryInfo.Icon(card.Category)" Size="1.6rem" /></div>
+                <span class="badge"><Icon Name="@CategoryInfo.Icon(card.Category)" Size="1.1em" /><span>@CategoryInfo.Label(card.Category)</span></span>
+                <p class="text">@Game.CurrentText</p>
+            </article>
+        }
+    </div>
+
+    <button class="btn-main" disabled="@(!_revealed)" @onclick="NextCard">
+        @if (_revealed)
+        {
+            <span>ผู้เล่นคนต่อไป</span><Icon Name="arrow-right" Size="1.2em" Stroke="2.5" />
+        }
+        else
+        {
+            <span>เปิดการ์ดก่อนนะ</span>
+        }
+    </button>
     <button class="btn-link" @onclick="End">จบเกม</button>
 }
 
 @code {
+    private bool _revealed;
+
     protected override void OnInitialized()
     {
         if (!Game.AgeConfirmed)
@@ -28,7 +76,13 @@
             Nav.NavigateTo("setup", replace: true);
     }
 
-    private void NextCard() => Game.Next();
+    private void Reveal() => _revealed = true;
+
+    private void NextCard()
+    {
+        Game.Next();
+        _revealed = false;
+    }
 
     private void End()
     {

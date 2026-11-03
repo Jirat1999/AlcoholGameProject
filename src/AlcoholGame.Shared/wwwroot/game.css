@@ -1,0 +1,64 @@
+:root {
+    --bg: #0c0919;
+    --panel: rgba(255, 255, 255, .07);
+    --panel-border: rgba(255, 255, 255, .12);
+    --text: #fdf9ff;
+    --muted: #a59fc4;
+    --accent: #ff4f8b;
+    --accent-2: #8e5bff;
+}
+
+html, body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Sarabun", "Noto Sans Thai", "Leelawadee UI", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background:
+        radial-gradient(60rem 40rem at 10% -10%, rgba(142, 91, 255, .35), transparent 60%),
+        radial-gradient(50rem 40rem at 110% 10%, rgba(255, 79, 139, .30), transparent 60%),
+        radial-gradient(40rem 30rem at 50% 120%, rgba(0, 194, 255, .18), transparent 60%),
+        var(--bg);
+    background-attachment: fixed;
+}
+
+button { font-family: inherit; cursor: pointer; }
+.icon { display: inline-block; flex: none; vertical-align: -.125em; }
+button:focus-visible, input:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+
+/* category colours shared by setup tiles and play cards */
+.cat-truth { --c1: #3a86ff; --c2: #00c2ff; }
+.cat-dare  { --c1: #ff5d3a; --c2: #ff2e63; }
+.cat-group { --c1: #06d6a0; --c2: #1b9aaa; }
+.cat-rule  { --c1: #ffb703; --c2: #fb8500; }
+.cat-vote  { --c1: #9b5de5; --c2: #f15bb5; }
+
+.btn-main {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    width: 100%;
+    padding: 1.05rem 1rem;
+    border: 0;
+    border-radius: 1rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: .02em;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 8px 24px rgba(255, 79, 139, .35), inset 0 1px 0 rgba(255, 255, 255, .3);
+    transition: transform .12s ease, box-shadow .12s ease, opacity .2s;
+}
+.btn-main:active:not(:disabled) { transform: translateY(2px) scale(.99); box-shadow: 0 4px 12px rgba(255, 79, 139, .3); }
+.btn-main:disabled { opacity: .35; box-shadow: none; }
+
+.btn-link { background: transparent; border: 0; color: var(--muted); text-decoration: underline; padding: .6rem; }
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
