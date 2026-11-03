@@ -1,0 +1,38 @@
+@page "/play"
+@inject GameState Game
+@inject NavigationManager Nav
+
+<PageTitle>กำลังเล่น</PageTitle>
+
+@if (Game.Started && Game.CurrentCard is { } card)
+{
+    <div class="turn">ตาของ <strong>@Game.CurrentPlayer</strong></div>
+
+    <article class="card cat-@card.Category.ToString().ToLowerInvariant()">
+        <span class="badge">@CategoryInfo.Label(card.Category)</span>
+        <p class="text">@Game.CurrentText</p>
+    </article>
+
+    <div class="meta">รอบที่ @Game.Round · ใบที่ @Game.CardsShownThisRound/@Game.DeckSize</div>
+
+    <button class="btn-main" @onclick="NextCard">ถัดไป</button>
+    <button class="btn-link" @onclick="End">จบเกม</button>
+}
+
+@code {
+    protected override void OnInitialized()
+    {
+        if (!Game.AgeConfirmed)
+            Nav.NavigateTo("", replace: true);
+        else if (!Game.Started)
+            Nav.NavigateTo("setup", replace: true);
+    }
+
+    private void NextCard() => Game.Next();
+
+    private void End()
+    {
+        Game.Reset();
+        Nav.NavigateTo("setup");
+    }
+}

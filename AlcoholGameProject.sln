@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlcoholGame.Web", "src\Alco
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlcoholGame.Maui", "src\AlcoholGame.Maui\AlcoholGame.Maui.csproj", "{E7687CD2-6F41-493D-B573-090ECDFB9D6A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{FDCDB67B-8DEF-4C23-B264-A93BB2FA683C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlcoholGame.Shared.Tests", "tests\AlcoholGame.Shared.Tests\AlcoholGame.Shared.Tests.csproj", "{05684081-A6CE-48E6-94CC-A9792E9FAF81}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,10 +36,15 @@ Global
 		{E7687CD2-6F41-493D-B573-090ECDFB9D6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7687CD2-6F41-493D-B573-090ECDFB9D6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7687CD2-6F41-493D-B573-090ECDFB9D6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05684081-A6CE-48E6-94CC-A9792E9FAF81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05684081-A6CE-48E6-94CC-A9792E9FAF81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05684081-A6CE-48E6-94CC-A9792E9FAF81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05684081-A6CE-48E6-94CC-A9792E9FAF81}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A7F0048A-2B43-4ADE-A19C-5FE9F754A1AB} = {ED153AC2-D1A5-4340-A768-BD55BD81ADCD}
 		{2F62D68A-637B-45C4-B3D6-1C1BDE0AB2B8} = {ED153AC2-D1A5-4340-A768-BD55BD81ADCD}
 		{E7687CD2-6F41-493D-B573-090ECDFB9D6A} = {ED153AC2-D1A5-4340-A768-BD55BD81ADCD}
+		{05684081-A6CE-48E6-94CC-A9792E9FAF81} = {FDCDB67B-8DEF-4C23-B264-A93BB2FA683C}
 	EndGlobalSection
 EndGlobal

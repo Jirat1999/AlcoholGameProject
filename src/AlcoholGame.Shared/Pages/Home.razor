@@ -1,7 +1,24 @@
 @page "/"
+@inject GameState Game
+@inject NavigationManager Nav
 
-<PageTitle>Alcohol Game</PageTitle>
+<PageTitle>เกมวงเหล้า</PageTitle>
 
-<h1>Alcohol Game</h1>
+<section class="home">
+    <h1>🍻 เกมวงเหล้า</h1>
+    <p class="lead">การ์ดคำสั่งสำหรับวงเพื่อน ส่งมือถือต่อกันรอบวง</p>
 
-<p>Shared UI running on both the MAUI app and the web.</p>
+    <div class="gate">
+        <p><strong>เกมนี้สำหรับผู้มีอายุ 20 ปีขึ้นไปเท่านั้น</strong></p>
+        <p>การดื่มเป็นทางเลือกของแต่ละคน ไม่ต้องการดื่มก็ข้ามการ์ดได้เสมอ และห้ามขับขี่หลังดื่ม</p>
+        <button class="btn-main" @onclick="Confirm">ฉันอายุ 20 ปีขึ้นไป เริ่มเลย</button>
+    </div>
+</section>
+
+@code {
+    private void Confirm()
+    {
+        Game.AgeConfirmed = true;
+        Nav.NavigateTo("setup");
+    }
+}

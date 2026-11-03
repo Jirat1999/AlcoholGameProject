@@ -1,0 +1,95 @@
+@page "/setup"
+@inject GameState Game
+@inject NavigationManager Nav
+
+<PageTitle>ตั้งค่าเกม</PageTitle>
+
+<h2>ผู้เล่น (@_players.Count/@GameState.MaxPlayers)</h2>
+
+<form class="add-row" @onsubmit="AddPlayer" @onsubmit:preventDefault="true">
+    <input @bind="_name" @bind:event="oninput" maxlength="20" placeholder="ชื่อผู้เล่น" aria-label="ชื่อผู้เล่น" />
+    <button type="submit" class="btn-add" disabled="@(!CanAdd)">เพิ่ม</button>
+</form>
+
+<ul class="players">
+    @foreach (var p in _players)
+    {
+        <li>
+            <span>@p</span>
+            <button type="button" class="btn-x" aria-label="ลบ @p" @onclick="() => Remove(p)">✕</button>
+        </li>
+    }
+</ul>
+
+<h2>หมวดการ์ด</h2>
+<div class="cats">
+    @foreach (var c in Enum.GetValues<Category>())
+    {
+        var cat = c;
+        <label class="cat cat-@cat.ToString().ToLowerInvariant()">
+            <input type="checkbox" checked="@_cats.Contains(cat)" @onchange="e => ToggleCat(cat, (bool)e.Value!)" />
+            @CategoryInfo.Label(cat)
+        </label>
+    }
+</div>
+
+@if (_error is not null)
+{
+    <p class="error" role="alert">@_error</p>
+}
+
+<button class="btn-main" disabled="@(!CanStart)" @onclick="Start">เริ่มเกม</button>
+
+@code {
+    private readonly List<string> _players = [];
+    private readonly HashSet<Category> _cats = [.. Enum.GetValues<Category>()];
+    private string _name = "";
+    private string? _error;
+
+    private bool CanAdd => _name.Trim().Length > 0 && _players.Count < GameState.MaxPlayers;
+    private bool CanStart => _players.Count >= GameState.MinPlayers && _cats.Count > 0;
+
+    protected override void OnInitialized()
+    {
+        if (!Game.AgeConfirmed)
+        {
+            Nav.NavigateTo("", replace: true);
+            return;
+        }
+        _players.AddRange(Game.Players);
+    }
+
+    private void AddPlayer()
+    {
+        var n = _name.Trim();
+        if (n.Length == 0 || _players.Count >= GameState.MaxPlayers) return;
+        if (_players.Contains(n, StringComparer.OrdinalIgnoreCase))
+        {
+            _error = $"มีชื่อ \"{n}\" อยู่แล้ว";
+            return;
+        }
+        _error = null;
+        _players.Add(n);
+        _name = "";
+    }
+
+    private void Remove(string p) => _players.Remove(p);
+
+    private void ToggleCat(Category c, bool on)
+    {
+        if (on) _cats.Add(c); else _cats.Remove(c);
+    }
+
+    private void Start()
+    {
+        try
+        {
+            Game.Start(_players, _cats);
+            Nav.NavigateTo("play");
+        }
+        catch (ArgumentException ex)
+        {
+            _error = ex.Message;
+        }
+    }
+}
