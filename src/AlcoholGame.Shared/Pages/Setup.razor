@@ -1,44 +1,66 @@
 @page "/setup"
 @inject GameState Game
+@inject DeckService Decks
 @inject NavigationManager Nav
 
 <PageTitle>ตั้งค่าเกม</PageTitle>
 
-<h2>ผู้เล่น (@_players.Count/@GameState.MaxPlayers)</h2>
+<header class="head">
+    <h1>ใครเล่นบ้าง?</h1>
+    <span class="count">@_players.Count/@GameState.MaxPlayers</span>
+</header>
 
 <form class="add-row" @onsubmit="AddPlayer" @onsubmit:preventDefault="true">
-    <input @bind="_name" @bind:event="oninput" maxlength="20" placeholder="ชื่อผู้เล่น" aria-label="ชื่อผู้เล่น" />
-    <button type="submit" class="btn-add" disabled="@(!CanAdd)">เพิ่ม</button>
+    <input @bind="_name" @bind:event="oninput" maxlength="20" placeholder="พิมพ์ชื่อแล้วกดเพิ่ม" aria-label="ชื่อผู้เล่น" />
+    <button type="submit" class="btn-add" disabled="@(!CanAdd)">+ เพิ่ม</button>
 </form>
-
-<ul class="players">
-    @foreach (var p in _players)
-    {
-        <li>
-            <span>@p</span>
-            <button type="button" class="btn-x" aria-label="ลบ @p" @onclick="() => Remove(p)">✕</button>
-        </li>
-    }
-</ul>
-
-<h2>หมวดการ์ด</h2>
-<div class="cats">
-    @foreach (var c in Enum.GetValues<Category>())
-    {
-        var cat = c;
-        <label class="cat cat-@cat.ToString().ToLowerInvariant()">
-            <input type="checkbox" checked="@_cats.Contains(cat)" @onchange="e => ToggleCat(cat, (bool)e.Value!)" />
-            @CategoryInfo.Label(cat)
-        </label>
-    }
-</div>
 
 @if (_error is not null)
 {
     <p class="error" role="alert">@_error</p>
 }
 
-<button class="btn-main" disabled="@(!CanStart)" @onclick="Start">เริ่มเกม</button>
+@if (_players.Count == 0)
+{
+    <p class="empty">ยังไม่มีผู้เล่น เพิ่มอย่างน้อย @GameState.MinPlayers คน</p>
+}
+else
+{
+    <ul class="players">
+        @for (var i = 0; i < _players.Count; i++)
+        {
+            var idx = i;
+            var p = _players[i];
+            <li>
+                <span class="avatar" style="background:@Avatar.Color(idx)">@Avatar.Initial(p)</span>
+                <span class="pname">@p</span>
+                <button type="button" class="btn-x" aria-label="ลบ @p" @onclick="() => Remove(p)">✕</button>
+            </li>
+        }
+    </ul>
+}
+
+<h2>เลือกสำรับการ์ด</h2>
+<div class="cats">
+    @foreach (var c in Enum.GetValues<Category>())
+    {
+        var cat = c;
+        var on = _cats.Contains(cat);
+        <button type="button" class="tile cat-@cat.ToString().ToLowerInvariant() @(on ? "on" : "")"
+                aria-pressed="@(on ? "true" : "false")" @onclick="() => ToggleCat(cat)">
+            <span class="emoji">@CategoryInfo.Emoji(cat)</span>
+            <span class="label">@CategoryInfo.Label(cat)</span>
+            <span class="hint">@CategoryInfo.Hint(cat) · @Decks.All.Count(x => x.Category == cat) ใบ</span>
+            @if (on) { <span class="check" aria-hidden="true">✓</span> }
+        </button>
+    }
+</div>
+
+<div class="start">
+    <button class="btn-main" disabled="@(!CanStart)" @onclick="Start">
+        @(CanStart ? "แจกไพ่เลย! 🎴" : "เพิ่มผู้เล่นให้ครบก่อน")
+    </button>
+</div>
 
 @code {
     private readonly List<string> _players = [];
@@ -75,9 +97,9 @@
 
     private void Remove(string p) => _players.Remove(p);
 
-    private void ToggleCat(Category c, bool on)
+    private void ToggleCat(Category c)
     {
-        if (on) _cats.Add(c); else _cats.Remove(c);
+        if (!_cats.Add(c)) _cats.Remove(c);
     }
 
     private void Start()
