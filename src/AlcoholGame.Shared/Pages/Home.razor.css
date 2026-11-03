@@ -1,6 +1,6 @@
 .home { position: relative; flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding-top: 4vh; overflow: hidden; }
 .hero { text-align: center; margin-top: 4vh; }
-.logo { font-size: 4.5rem; line-height: 1; filter: drop-shadow(0 8px 24px rgba(255, 79, 139, .6)); animation: bob 3s ease-in-out infinite; }
+.logo { line-height: 0; color: #ffd166; filter: drop-shadow(0 8px 24px rgba(255, 79, 139, .6)); animation: bob 3s ease-in-out infinite; }
 .title { margin: .4rem 0 0; font-size: 3.4rem; font-weight: 900; letter-spacing: .02em; line-height: 1.1;
     background: linear-gradient(135deg, #fff, #ffb3d1 45%, #b79bff); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .subtitle { display: inline-block; margin-top: .4rem; padding: .2rem 1rem; border-radius: 2rem; font-weight: 700; letter-spacing: .08em;

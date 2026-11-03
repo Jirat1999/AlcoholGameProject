@@ -37,23 +37,30 @@
         @if (!_revealed)
         {
             <button class="card-back" @onclick="Reveal" aria-label="แตะเพื่อเปิดการ์ด">
-                <span class="pattern" aria-hidden="true">🍻</span>
+                <span class="pattern" aria-hidden="true"><Icon Name="beer" Size="5rem" Stroke="1.5" /></span>
                 <span class="tap">แตะเพื่อเปิดการ์ด</span>
             </button>
         }
         else
         {
             <article class="card cat-@card.Category.ToString().ToLowerInvariant()">
-                <div class="corner tl">@CategoryInfo.Emoji(card.Category)</div>
-                <div class="corner br">@CategoryInfo.Emoji(card.Category)</div>
-                <span class="badge">@CategoryInfo.Emoji(card.Category) @CategoryInfo.Label(card.Category)</span>
+                <div class="corner tl"><Icon Name="@CategoryInfo.Icon(card.Category)" Size="1.6rem" /></div>
+                <div class="corner br"><Icon Name="@CategoryInfo.Icon(card.Category)" Size="1.6rem" /></div>
+                <span class="badge"><Icon Name="@CategoryInfo.Icon(card.Category)" Size="1.1em" /><span>@CategoryInfo.Label(card.Category)</span></span>
                 <p class="text">@Game.CurrentText</p>
             </article>
         }
     </div>
 
     <button class="btn-main" disabled="@(!_revealed)" @onclick="NextCard">
-        @(_revealed ? "ผู้เล่นคนต่อไป →" : "เปิดการ์ดก่อนนะ")
+        @if (_revealed)
+        {
+            <span>ผู้เล่นคนต่อไป</span><Icon Name="arrow-right" Size="1.2em" Stroke="2.5" />
+        }
+        else
+        {
+            <span>เปิดการ์ดก่อนนะ</span>
+        }
     </button>
     <button class="btn-link" @onclick="End">จบเกม</button>
 }

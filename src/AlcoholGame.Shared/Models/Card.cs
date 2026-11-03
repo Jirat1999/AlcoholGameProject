@@ -21,14 +21,15 @@ public static class CategoryInfo
         _ => c.ToString(),
     };
 
-    public static string Emoji(Category c) => c switch
+    /// <summary>Icon name (see Components/IconData.cs) shown for the category.</summary>
+    public static string Icon(Category c) => c switch
     {
-        Category.Truth => "🤫",
-        Category.Dare => "🔥",
-        Category.Group => "🍻",
-        Category.Rule => "📜",
-        Category.Vote => "🗳️",
-        _ => "🃏",
+        Category.Truth => "message-circle-question-mark",
+        Category.Dare => "flame",
+        Category.Group => "users",
+        Category.Rule => "scroll-text",
+        Category.Vote => "vote",
+        _ => "sparkles",
     };
 
     public static string Hint(Category c) => c switch

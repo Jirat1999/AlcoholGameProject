@@ -27,6 +27,7 @@ body {
 }
 
 button { font-family: inherit; cursor: pointer; }
+.icon { display: inline-block; flex: none; vertical-align: -.125em; }
 button:focus-visible, input:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
 
 /* category colours shared by setup tiles and play cards */
@@ -37,6 +38,10 @@ button:focus-visible, input:focus-visible { outline: 3px solid #fff; outline-off
 .cat-vote  { --c1: #9b5de5; --c2: #f15bb5; }
 
 .btn-main {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
     width: 100%;
     padding: 1.05rem 1rem;
     border: 0;

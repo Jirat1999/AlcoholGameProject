@@ -1,0 +1,13 @@
+<svg class="icon @Class" width="@Size" height="@Size" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+     stroke-width="@Stroke" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">@((MarkupString)Svg)</svg>
+
+@code {
+    /// <summary>Icon name from <see cref="IconData.Paths"/>, e.g. "beer", "flame".</summary>
+    [Parameter, EditorRequired] public string Name { get; set; } = "";
+    [Parameter] public string? Class { get; set; }
+    /// <summary>Any CSS length. Defaults to the surrounding font size.</summary>
+    [Parameter] public string Size { get; set; } = "1em";
+    [Parameter] public double Stroke { get; set; } = 2;
+
+    private string Svg => IconData.Paths.GetValueOrDefault(Name, "");
+}

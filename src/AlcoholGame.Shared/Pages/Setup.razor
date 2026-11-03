@@ -12,7 +12,7 @@
 
 <form class="add-row" @onsubmit="AddPlayer" @onsubmit:preventDefault="true">
     <input @bind="_name" @bind:event="oninput" maxlength="20" placeholder="พิมพ์ชื่อแล้วกดเพิ่ม" aria-label="ชื่อผู้เล่น" />
-    <button type="submit" class="btn-add" disabled="@(!CanAdd)">+ เพิ่ม</button>
+    <button type="submit" class="btn-add" disabled="@(!CanAdd)"><Icon Name="plus" Size="1.1em" Stroke="2.5" /><span>เพิ่ม</span></button>
 </form>
 
 @if (_error is not null)
@@ -34,7 +34,7 @@ else
             <li>
                 <span class="avatar" style="background:@Avatar.Color(idx)">@Avatar.Initial(p)</span>
                 <span class="pname">@p</span>
-                <button type="button" class="btn-x" aria-label="ลบ @p" @onclick="() => Remove(p)">✕</button>
+                <button type="button" class="btn-x" aria-label="ลบ @p" @onclick="() => Remove(p)"><Icon Name="x" Size="1.2rem" /></button>
             </li>
         }
     </ul>
@@ -48,17 +48,24 @@ else
         var on = _cats.Contains(cat);
         <button type="button" class="tile cat-@cat.ToString().ToLowerInvariant() @(on ? "on" : "")"
                 aria-pressed="@(on ? "true" : "false")" @onclick="() => ToggleCat(cat)">
-            <span class="emoji">@CategoryInfo.Emoji(cat)</span>
+            <span class="emoji"><Icon Name="@CategoryInfo.Icon(cat)" Size="1.9rem" /></span>
             <span class="label">@CategoryInfo.Label(cat)</span>
             <span class="hint">@CategoryInfo.Hint(cat) · @Decks.All.Count(x => x.Category == cat) ใบ</span>
-            @if (on) { <span class="check" aria-hidden="true">✓</span> }
+            @if (on) { <span class="check" aria-hidden="true"><Icon Name="check" Size=".9rem" Stroke="3.5" /></span> }
         </button>
     }
 </div>
 
 <div class="start">
     <button class="btn-main" disabled="@(!CanStart)" @onclick="Start">
-        @(CanStart ? "แจกไพ่เลย! 🎴" : "เพิ่มผู้เล่นให้ครบก่อน")
+        @if (CanStart)
+        {
+            <span>แจกไพ่เลย!</span><Icon Name="sparkles" Size="1.3em" />
+        }
+        else
+        {
+            <span>เพิ่มผู้เล่นให้ครบก่อน</span>
+        }
     </button>
 </div>
 
